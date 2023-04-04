@@ -6,10 +6,12 @@ import LogoCoffeeDelivery from "../assets/logo-coffee-delivery.svg"
 export function Header() {
   return (
     <header className="flex justify-between py-8 px-40 mx-auto max-w-[1440px]">
-      <img
-        className="h-10"
-        src={LogoCoffeeDelivery}
-      />
+      <NavLink to="/" title="Home">
+        <img
+          className="h-10"
+          src={LogoCoffeeDelivery}
+        />
+      </NavLink>
       <div className="flex gap-3">
         <button className="p-2 flex gap-1 bg-brand-purple-light text-brand-purple-dark rounded-md font-roboto font-normal hover:opacity-90 hover:transition-opacity" >
           <MapPin size={22} weight="fill" className="text-brand-purple " />

@@ -1,28 +1,101 @@
-import { Bank, CreditCard, CurrencyDollar, MapPinLine, Minus, Money, Plus, Trash } from "phosphor-react";
+import { useContext, useEffect, useState } from "react";
 import { FormDelivery } from "../components/FormDelivery";
 
-import { Item } from "../components/Item";
+import { CoffeProps, CoffeeUnit } from "../components/CoffeeUnit";
 import { Payment } from "../components/Payment";
+import { CartContext } from "../context/CartContext";
+import { priceFormatter } from "../utils/formatter";
+
+interface coffeeOnCart {
+  count: number
+  name: string
+  description: string,
+  price: number
+  src: string
+  priceTotal: number
+  tags: string[],
+}
+
+interface coffee {
+  name: string,
+  description: string,
+  src: string,
+  price: number,
+  tags: string[],
+}
 
 export function Checkout() {
+  const { cart, addToCart, removeToCart } = useContext(CartContext)
+
+  console.log(cart)
+
+  const SumOfEachTypeOfCoffee = Object.values(
+    cart.reduce<coffeeOnCart[]>((acc, coffee: coffee) => {
+
+      if (!acc[coffee.name]) {
+        acc[coffee.name] = {
+          name: coffee.name,
+          description: coffee.description,
+          src: coffee.src,
+          price: coffee.price,
+          tags: coffee.tags,
+          count: 0,
+          priceTotal: 0
+        };
+      }
+      acc[coffee.name].count++;
+      acc[coffee.name].priceTotal += coffee.price;
+      return acc;
+    }, [])
+  );
+  console.log(SumOfEachTypeOfCoffee)
+  const SumTotalPrice =
+    SumOfEachTypeOfCoffee.reduce((acc, coffee) => {
+      acc += coffee.priceTotal
+      return acc
+    }, 0)
+
+
+  function handleAddCoffee(coffee: coffee) {
+    addToCart(
+      {
+        name: coffee.name,
+        description: coffee.description,
+        price: coffee.price,
+        src: coffee.src,
+        tags: coffee.tags
+      }
+    )
+  }
+
+
   return (
     <div className="flex justify-between px-40 gap-8 mx-auto max-w-[1440px]">
       <div>
         <p className="font-baloo text-lg ">Complete seu pedido</p>
-
         <FormDelivery />
-
         <Payment />
-
       </div>
 
       <section>
         <p className="font-baloo text-lg ">Cafés selecionados</p>
         <div className=" flex flex-col   bg-base-card w-[448px]  justify-between 
         rounded-tl-md rounded-tr-[44px] rounded-bl-[44px] rounded-br-md p-10 gap">
+          {SumOfEachTypeOfCoffee.map(coffee => {
+            const formattedPrice = priceFormatter.format(coffee.priceTotal)
 
-          <Item />
-          <Item />
+            return (
+              <CoffeeUnit
+                key={`${coffee.src}--${coffee.name}`}
+                img={coffee.src}
+                count={coffee.count}
+                price={formattedPrice}
+                title={coffee.name}
+                handleAddCoffee={() => handleAddCoffee(coffee)}
+                handleRemoveCoffee={() => removeToCart(coffee.name)}
+              />
+            )
+          })}
 
           <div className="flex w-full justify-between mt-6">
             <div className="flex flex-col items-start gap-3">
@@ -31,9 +104,9 @@ export function Checkout() {
               <p className="font-roboto font-bold text-xl text-base-subtitle">Total</p>
             </div>
             <div className="flex flex-col items-end gap-3">
-              <p className="font-roboto text-sm text-base-text">R$ 29,70</p>
+              <p className="font-roboto text-sm text-base-text">{priceFormatter.format(SumTotalPrice)}</p>
               <p className="font-roboto text-sm text-base-text">R$ 3,50</p>
-              <p className="font-roboto font-bold text-xl text-base-subtitle">R$ 33,20</p>
+              <p className="font-roboto font-bold text-xl text-base-subtitle">{priceFormatter.format(SumTotalPrice + 3.50)}</p>
             </div>
           </div>
           <button

@@ -1,9 +1,11 @@
-import { Header } from "../components/Header";
 import { Headline } from "../components/Headline";
 import { Coffee } from "../components/Coffee";
 import { coffees } from "../services/coffees";
+import { useContext } from "react";
+import { CartContext } from "../context/CartContext";
 
 export function Home() {
+  const {addToCart, removeToCart} = useContext(CartContext)
   return (
     <>
       <Headline />
@@ -12,8 +14,17 @@ export function Home() {
           Nossos cafés
         </h3>
         <div className="flex gap-8 flex-wrap">
-          {coffees.map((coffee) => (
-            <Coffee key={coffee.name} {...coffee} />
+          {coffees.map((coffee, index) => (
+            <Coffee
+              key={coffee.name}
+              addUnit={() => { 
+                addToCart(coffee)
+              }}
+              removeUnit={() => {
+                removeToCart(coffee.name)
+               }}
+              {...coffee}
+            />
           ))}
         </div>
       </div>

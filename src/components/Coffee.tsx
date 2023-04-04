@@ -6,9 +6,11 @@ interface CoffeeProps {
   src: string;
   price: number;
   tags: string[];
+  removeUnit:  () => void
+  addUnit:  () => void
 }
 
-export function Coffee({ name, description, src, price, tags }: CoffeeProps) {
+export function Coffee({ name, description, src, price, tags, removeUnit, addUnit }: CoffeeProps) {
   return (
     <div className="w-64 h-80 px-5 flex flex-col items-center bg-base-card rounded-tl-md rounded-tr-[36px] rounded-bl-[36px] rounded-br-md text-center">
       <img src={src} className="w-[120px] h-[120px] mt-[-1rem]" alt="" />
@@ -33,14 +35,14 @@ export function Coffee({ name, description, src, price, tags }: CoffeeProps) {
       <div className="mt-[33px] w-full flex gap-2 items-center justify-end">
         <div className="flex items-baseline gap-1 mr-auto">
           <p className="font-roboto text-[14px] text-base-text">R$</p>
-          <p className="font-baloo font-extrabold text-2xl text-base-text">{price}</p>
+          <p className="font-baloo font-extrabold text-2xl text-base-text">{price.toFixed(2)}</p>
         </div>
         <div className=" flex items-center justify-between gap-1 bg-base-button rounded-[6px] w-[72px] h-[38px] p-2">
-          <button>
+          <button onClick={() => removeUnit()}>
             <Minus size={14} weight="bold" className=" text-brand-purple" />
           </button>
           1
-          <button>
+          <button onClick={() => addUnit() }>
             <Plus size={14} weight="bold" className=" text-brand-purple" />
           </button>
         </div>
