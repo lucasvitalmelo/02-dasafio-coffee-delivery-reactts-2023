@@ -1,19 +1,19 @@
 import { useContext, useEffect, useState } from "react";
 import { FormDelivery } from "../components/FormDelivery";
 
-import { CoffeProps, CoffeeUnit } from "../components/CoffeeUnit";
+import {CoffeeUnit } from "../components/CoffeeUnit";
 import { Payment } from "../components/Payment";
 import { CartContext } from "../context/CartContext";
 import { priceFormatter } from "../utils/formatter";
 
 interface coffeeOnCart {
-  count: number
   name: string
   description: string,
-  price: number
   src: string
-  priceTotal: number
   tags: string[],
+  price: number
+  count: number
+  priceTotal: number
 }
 
 interface coffee {
@@ -27,13 +27,13 @@ interface coffee {
 export function Checkout() {
   const { cart, addToCart, removeToCart } = useContext(CartContext)
 
-  console.log(cart)
-
   const SumOfEachTypeOfCoffee = Object.values(
-    cart.reduce<coffeeOnCart[]>((acc, coffee: coffee) => {
+    cart.reduce((acc: Array<coffeeOnCart>, coffee: coffee) => {
+      // @ts-ignore
+      const coffeeName = acc[coffee.name]
 
-      if (!acc[coffee.name]) {
-        acc[coffee.name] = {
+      if (!acc[coffeeName]) {
+        acc[coffeeName] = {
           name: coffee.name,
           description: coffee.description,
           src: coffee.src,
@@ -43,8 +43,8 @@ export function Checkout() {
           priceTotal: 0
         };
       }
-      acc[coffee.name].count++;
-      acc[coffee.name].priceTotal += coffee.price;
+      acc[coffeeName].count++;
+      acc[coffeeName].priceTotal += coffee.price;
       return acc;
     }, [])
   );
