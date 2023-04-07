@@ -1,16 +1,17 @@
 import { Minus, Plus, Trash } from "phosphor-react";
 
-export interface CoffeProps {
+export interface CoffeeUnitProps {
   img: string
   title: string
-  count: number
+  amount: number
   price: string
-  handleAddCoffee: () => void
-  handleRemoveCoffee: () => void
+  handleAddOneCoffee: () => void
+  handleRemoveOneCoffee: () => void
+  handleRemoveAllCoffee: () => void
 }
 
 
-export function CoffeeUnit({img, title, count, price, handleAddCoffee, handleRemoveCoffee} : CoffeProps) {
+export function CoffeeUnit({img, title, amount, price, handleAddOneCoffee, handleRemoveOneCoffee, handleRemoveAllCoffee} : CoffeeUnitProps) {
   return (
     <div className="flex justify-between border-b-[1px] pb-6 mb-6">
       <div className="flex gap-2">
@@ -23,16 +24,17 @@ export function CoffeeUnit({img, title, count, price, handleAddCoffee, handleRem
           <p className="font-roboto text-base-subtitle">{title}</p>
           <div className="flex gap-2">
             <div className=" flex items-center justify-between gap-1 bg-base-button rounded-[6px] w-[72px] h-8 p-2">
-              <button onClick={handleRemoveCoffee}>
+              <button onClick={handleRemoveOneCoffee}>
                 <Minus size={14} weight="bold" className=" text-brand-purple" />
               </button>
-              {count}
-              <button onClick={handleAddCoffee}>
+              {amount}
+              <button onClick={handleAddOneCoffee}>
                 <Plus size={14} weight="bold" className=" text-brand-purple" />
               </button>
             </div>
             <button
               className="flex bg-base-button rounded-md p-2 text-base-subtitle text-xs  items-center gap-3 "
+              onClick={handleRemoveAllCoffee}
             >
               <Trash size={16} className="text-brand-purple" />
               REMOVER

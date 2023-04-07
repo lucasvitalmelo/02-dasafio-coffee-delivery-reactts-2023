@@ -1,11 +1,13 @@
 import { Headline } from "../components/Headline";
 import { Coffee } from "../components/Coffee";
 import { coffees } from "../services/coffees";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { CartContext } from "../context/CartContext";
 
 export function Home() {
-  const {addToCart, removeToCart} = useContext(CartContext)
+  const { addCoffeToCart } = useContext(CartContext)
+
+
   return (
     <>
       <Headline />
@@ -17,12 +19,8 @@ export function Home() {
           {coffees.map((coffee, index) => (
             <Coffee
               key={coffee.name}
-              addUnit={() => { 
-                addToCart(coffee)
-              }}
-              removeUnit={() => {
-                removeToCart(coffee.name)
-               }}
+
+
               {...coffee}
             />
           ))}
